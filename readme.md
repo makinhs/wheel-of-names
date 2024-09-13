@@ -42,6 +42,10 @@ Try it out here: [Wheel of Names](https://wheelofnamesv2.netlify.app/)
 
 *Note: The rigged winner feature is intended for entertainment purposes. Use it responsibly!*
 
+## GitHub Repository
+
+You can find the source code on GitHub: [Wheel of Names Repository](https://github.com/makinhs/wheel-of-names)
+
 ## Disclaimer
 
 This project was created for fun and educational purposes. It includes a rigged feature as a JavaScript example. Use it at your own risk.
@@ -53,4 +57,3 @@ This project is open-source and free to use. Feel free to modify and distribute 
 ---
 
 Enjoy spinning the wheel!
-

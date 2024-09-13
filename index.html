@@ -3,31 +3,39 @@
 <head>
   <title>Wheel of Names</title>
   <style>
-      body {
-          font-family: Arial, sans-serif;
-          text-align: center;
-      }
-      #wheelCanvas {
-          border: 2px solid #000;
-          margin-top: 20px;
-      }
-      #namesInput {
-          width: 300px;
-          height: 100px;
-      }
-      #controls {
-          margin-top: 20px;
-      }
-      #spinBtn, #updateWheelBtn {
-          padding: 10px 20px;
-          font-size: 16px;
-      }
-      #result {
-          font-size: 24px;
-          font-weight: bold;
-          margin-top: 20px;
-          white-space: pre-wrap;
-      }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #wheelCanvas {
+      border: 2px solid #000;
+      margin-top: 20px;
+    }
+    #namesInput {
+      width: 300px;
+      height: 100px;
+    }
+    #controls {
+      margin-top: 20px;
+    }
+    #spinBtn, #updateWheelBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #result {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+    #disclaimer {
+      font-size: 12px;
+      color: gray;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
@@ -44,8 +52,11 @@
 
 <div id="result"></div>
 
+<div id="disclaimer">
+  <p>This project was created for fun and educational purposes. Use it at your own risk.</p>
+</div>
+
 <script src="wheel.js"></script>
 
 </body>
 </html>
-

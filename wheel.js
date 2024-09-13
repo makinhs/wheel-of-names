@@ -54,7 +54,6 @@ document.addEventListener('keydown', function(event) {
 
 // Function to update the wheel with names
 function updateWheel() {
-  document.getElementById('result').innerText = "";
   var input = document.getElementById('namesInput').value;
   names = input.split(',').map(function(name) {
     return name.trim();
@@ -63,6 +62,9 @@ function updateWheel() {
   });
   startAngle = 0; // Reset the start angle
   drawWheel();
+
+  // Save names to localStorage
+  localStorage.setItem('wheelNames', JSON.stringify(names));
 }
 
 // Function to draw the wheel
@@ -74,10 +76,10 @@ function drawWheel() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (names.length === 0) {
-    // If no names are left, display a message
+    // If no names are available, display a message
     ctx.font = 'bold 24px Arial';
     ctx.fillStyle = 'black';
-    ctx.fillText('No names left!', canvas.width / 2 - ctx.measureText('No names left!').width / 2, canvas.height / 2);
+    ctx.fillText('No names available!', canvas.width / 2 - ctx.measureText('No names available!').width / 2, canvas.height / 2);
     return;
   }
 
@@ -97,8 +99,8 @@ function drawWheel() {
     ctx.save();
     ctx.fillStyle = "white";
     ctx.translate(
-      canvas.width / 2 + Math.cos(angle + arc / 2) * textRadius,
-      canvas.height / 2 + Math.sin(angle + arc / 2) * textRadius
+        canvas.width / 2 + Math.cos(angle + arc / 2) * textRadius,
+        canvas.height / 2 + Math.sin(angle + arc / 2) * textRadius
     );
     ctx.rotate(angle + arc / 2 + Math.PI / 2);
     var text = names[i];
@@ -107,12 +109,12 @@ function drawWheel() {
     ctx.restore();
   }
 
-  // Draw arrow
+  // Draw arrow pointing down at the top of the wheel
   ctx.fillStyle = "black";
   ctx.beginPath();
   ctx.moveTo(canvas.width / 2 - 10, canvas.height / 2 - (outsideRadius + 20));
   ctx.lineTo(canvas.width / 2 + 10, canvas.height / 2 - (outsideRadius + 20));
-  ctx.lineTo(canvas.width / 2, canvas.height / 2 - (outsideRadius + 30));
+  ctx.lineTo(canvas.width / 2, canvas.height / 2 - (outsideRadius + 10));
   ctx.closePath();
   ctx.fill();
 }
@@ -126,12 +128,9 @@ function getColor(item, maxitem) {
 // Function to start spinning the wheel
 function spin() {
   if (names.length === 0) {
-    alert("No names left to spin!");
+    alert("No names available to spin!");
     return;
   }
-
-  document.getElementById('result').innerText = "";
-
 
   spinTime = 0;
   spinTimeTotal = 5000; // Total spin time in milliseconds
@@ -145,7 +144,7 @@ function spin() {
       alert('Rigged winner "' + riggedWinner + '" not found in the names list.');
       riggedWinner = ''; // Clear the rigged winner
     } else {
-      var desiredAngle = (names.length - winnerIndex) * arc - (arc / 2);
+      var desiredAngle = (winnerIndex) * arc + (arc / 2);
       desiredAngle = desiredAngle % (2 * Math.PI);
 
       var currentAngle = (startAngle + Math.PI / 2) % (2 * Math.PI); // Adjust for arrow at 90 degrees
@@ -183,28 +182,15 @@ function rotateWheel() {
 function stopRotateWheel() {
   clearTimeout(spinTimeout);
 
-  var degrees = startAngle * 180 / Math.PI + 90;
+  var degrees = startAngle * 180 / Math.PI + 90; // Adjust for arrow at 90 degrees
   var arcd = arc * 180 / Math.PI;
   var index = Math.floor((360 - (degrees % 360)) / arcd) % names.length;
 
   var text = names[index];
   document.getElementById('result').innerText = "Congratulations! The winner is " + text + "!";
 
-  // Remove the winner's name from the names array
-  // names.splice(index, 1);
-
   // Clear the rigged winner after spinning
   riggedWinner = '';
-
-  if (names.length > 0) {
-    // Reset start angle to align the wheel correctly
-    startAngle = startAngle % (2 * Math.PI);
-    drawWheel();
-  } else {
-    // Clear the canvas if no names are left
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById('result').innerText += "\nAll names have been selected.";
-  }
 }
 
 // Easing function for spin animation
@@ -212,6 +198,16 @@ function easeOut(t) {
   return 1 - Math.pow(1 - t, 3);
 }
 
-// Initial draw
-drawWheel();
-
+// Load names from localStorage on page load
+window.onload = function() {
+  var storedNames = localStorage.getItem('wheelNames');
+  if (storedNames) {
+    names = JSON.parse(storedNames);
+    document.getElementById('namesInput').value = names.join(', ');
+    startAngle = 0;
+    drawWheel();
+  } else {
+    // Initial draw if no names are in localStorage
+    drawWheel();
+  }
+}
