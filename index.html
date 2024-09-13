@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wheel of Names</title>
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          text-align: center;
+      }
+      #wheelCanvas {
+          border: 2px solid #000;
+          margin-top: 20px;
+      }
+      #namesInput {
+          width: 300px;
+          height: 100px;
+      }
+      #controls {
+          margin-top: 20px;
+      }
+      #spinBtn, #updateWheelBtn {
+          padding: 10px 20px;
+          font-size: 16px;
+      }
+      #result {
+          font-size: 24px;
+          font-weight: bold;
+          margin-top: 20px;
+          white-space: pre-wrap;
+      }
+  </style>
+</head>
+<body>
+
+<h1>Wheel of Names</h1>
+
+<textarea id="namesInput" placeholder="Enter names separated by commas"></textarea><br>
+<div id="controls">
+  <button id="updateWheelBtn">Update Wheel</button>
+  <button id="spinBtn">Spin the Wheel</button>
+</div>
+
+<canvas id="wheelCanvas" width="500" height="500"></canvas>
+
+<div id="result"></div>
+
+<script src="wheel.js"></script>
+
+</body>
+</html>
+
