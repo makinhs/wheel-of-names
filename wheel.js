@@ -88,7 +88,8 @@ function drawWheel() {
 
   for (var i = 0; i < numSegments; i++) {
     var angle = startAngle + i * arc;
-    ctx.fillStyle = getColor(i, numSegments);
+    var color = getColor(i, numSegments);
+    ctx.fillStyle = color;
 
     ctx.beginPath();
     ctx.moveTo(canvas.width / 2, canvas.height / 2);
@@ -96,8 +97,11 @@ function drawWheel() {
     ctx.lineTo(canvas.width / 2, canvas.height / 2);
     ctx.fill();
 
+    // Determine the text color based on the background color
+    var textColor = getContrastingTextColor(color);
+
     ctx.save();
-    ctx.fillStyle = "white";
+    ctx.fillStyle = textColor;
     ctx.translate(
         canvas.width / 2 + Math.cos(angle + arc / 2) * textRadius,
         canvas.height / 2 + Math.sin(angle + arc / 2) * textRadius
@@ -123,6 +127,56 @@ function drawWheel() {
 function getColor(item, maxitem) {
   var hue = item * (360 / maxitem);
   return 'hsl(' + hue + ', 100%, 50%)';
+}
+
+// Function to determine the contrasting text color
+function getContrastingTextColor(backgroundColor) {
+  // Extract HSL values from the background color string
+  var hslRegex = /hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/;
+  var result = hslRegex.exec(backgroundColor);
+
+  var h = parseInt(result[1]);
+  var s = parseInt(result[2]);
+  var l = parseInt(result[3]);
+
+  // Convert HSL to RGB
+  var rgb = hslToRgb(h / 360, s / 100, l / 100);
+
+  // Calculate luminance
+  var luminance = (0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b);
+
+  // Return black for light backgrounds and white for dark backgrounds
+  return luminance > 0.6 ? 'black' : 'white';
+}
+
+// Function to convert HSL to RGB
+function hslToRgb(h, s, l) {
+  var r, g, b;
+
+  if (s === 0) {
+    r = g = b = l; // achromatic
+  } else {
+    var hue2rgb = function hue2rgb(p, q, t) {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+
+    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    var p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1 / 3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1 / 3);
+  }
+
+  return {
+    r: r,
+    g: g,
+    b: b
+  };
 }
 
 // Function to start spinning the wheel
