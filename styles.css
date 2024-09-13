@@ -1,0 +1,183 @@
+/* styles.css */
+
+/* Root variables for easy theming */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #ffffff;
+    --accent-color: #ff9800;
+    --background-color: #f4f4f4;
+    --text-color: #333333;
+    --font-family: 'Poppins', sans-serif;
+}
+
+/* Reset some default styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Body styling */
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    text-align: center;
+    padding: 20px;
+    max-height: 100vh;
+    overflow: auto;
+}
+
+/* Header */
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Section */
+.input-section {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#namesInput {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    margin-bottom: 15px;
+}
+
+#controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+#controls button {
+    padding: 12px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#controls button:hover {
+    background-color: var(--accent-color);
+}
+
+/* Wheel Section */
+.wheel-section {
+    position: relative;
+}
+
+#wheelCanvas {
+    border: 5px solid var(--primary-color);
+    border-radius: 50%;
+    margin-bottom: 20px;
+    max-width: 100%;
+    height: auto;
+}
+
+#result {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Responsive Design */
+@media (max-height: 900px) {
+    /* Adjust canvas size */
+    #wheelCanvas {
+        width: 400px;
+        height: 400px;
+    }
+
+    /* Adjust heading size */
+    h1 {
+        font-size: 2.5em;
+    }
+
+    /* Adjust input textarea height */
+    #namesInput {
+        height: 70px;
+    }
+
+    /* Adjust button sizes */
+    #controls button {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+
+    /* Reduce margins and paddings */
+    .input-section {
+        padding: 15px;
+    }
+
+    footer {
+        margin-top: 15px;
+    }
+}
+
+@media (max-height: 768px) {
+    /* Further reduce canvas size */
+    #wheelCanvas {
+        width: 350px;
+        height: 350px;
+    }
+
+    /* Adjust heading size */
+    h1 {
+        font-size: 2em;
+    }
+
+    #namesInput {
+        height: 60px;
+    }
+
+    #controls button {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Adjust layout for narrow screens */
+    #controls {
+        flex-direction: column;
+    }
+
+    #controls button {
+        width: 100%;
+    }
+}

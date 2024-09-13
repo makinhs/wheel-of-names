@@ -1,3 +1,5 @@
+// wheel.js
+
 // Get canvas element and context
 var canvas = document.getElementById('wheelCanvas');
 var ctx = canvas.getContext('2d');
@@ -52,6 +54,17 @@ document.addEventListener('keydown', function(event) {
   }
 });
 
+// Set canvas dimensions based on viewport
+function setCanvasSize() {
+  var containerWidth = canvas.parentElement.clientWidth;
+  var containerHeight = window.innerHeight;
+
+  var size = Math.min(containerWidth * 0.9, containerHeight * 0.5); // Adjusted size
+
+  canvas.width = size;
+  canvas.height = size;
+}
+
 // Function to update the wheel with names
 function updateWheel() {
   var input = document.getElementById('namesInput').value;
@@ -61,6 +74,7 @@ function updateWheel() {
     return name !== '';
   });
   startAngle = 0; // Reset the start angle
+  setCanvasSize(); // Update canvas size
   drawWheel();
 
   // Save names to localStorage
@@ -69,8 +83,9 @@ function updateWheel() {
 
 // Function to draw the wheel
 function drawWheel() {
-  var outsideRadius = 200;
-  var textRadius = 160;
+  // Adjusted to use dynamic canvas size
+  var outsideRadius = canvas.width / 2 - 20;
+  var textRadius = outsideRadius - 30;
   var insideRadius = 0;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -84,7 +99,7 @@ function drawWheel() {
   }
 
   var numSegments = names.length;
-  arc = Math.PI / (numSegments / 2);
+  arc = 2 * Math.PI / numSegments;
 
   for (var i = 0; i < numSegments; i++) {
     var angle = startAngle + i * arc;
@@ -108,7 +123,7 @@ function drawWheel() {
     );
     ctx.rotate(angle + arc / 2 + Math.PI / 2);
     var text = names[i];
-    ctx.font = 'bold 15px Arial';
+    ctx.font = 'bold ' + Math.max(12, outsideRadius / 15) + 'px Arial';
     ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
     ctx.restore();
   }
@@ -198,7 +213,7 @@ function spin() {
       alert('Rigged winner "' + riggedWinner + '" not found in the names list.');
       riggedWinner = ''; // Clear the rigged winner
     } else {
-      var desiredAngle = (winnerIndex) * arc + (arc / 2);
+      var desiredAngle = (names.length - winnerIndex) * arc - (arc / 2);
       desiredAngle = desiredAngle % (2 * Math.PI);
 
       var currentAngle = (startAngle + Math.PI / 2) % (2 * Math.PI); // Adjust for arrow at 90 degrees
@@ -211,6 +226,10 @@ function spin() {
     totalRotation = rotations * 2 * Math.PI + Math.random() * 2 * Math.PI;
   }
 
+  // Disable spin button
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('result').classList.remove('show');
+
   rotateWheel();
 }
 
@@ -219,6 +238,7 @@ function rotateWheel() {
   spinTime += 30;
   if (spinTime >= spinTimeTotal) {
     startAngle = initialStartAngle + totalRotation;
+    startAngle = startAngle % (2 * Math.PI); // Normalize the angle
     stopRotateWheel();
     return;
   }
@@ -242,9 +262,13 @@ function stopRotateWheel() {
 
   var text = names[index];
   document.getElementById('result').innerText = "Congratulations! The winner is " + text + "!";
+  document.getElementById('result').classList.add('show');
 
   // Clear the rigged winner after spinning
   riggedWinner = '';
+
+  // Enable spin button
+  document.getElementById('spinBtn').disabled = false;
 }
 
 // Easing function for spin animation
@@ -253,7 +277,8 @@ function easeOut(t) {
 }
 
 // Load names from localStorage on page load
-window.onload = function() {
+window.addEventListener('load', function() {
+  setCanvasSize();
   var storedNames = localStorage.getItem('wheelNames');
   if (storedNames) {
     names = JSON.parse(storedNames);
@@ -264,4 +289,10 @@ window.onload = function() {
     // Initial draw if no names are in localStorage
     drawWheel();
   }
-}
+});
+
+// Adjust canvas size on window resize
+window.addEventListener('resize', function() {
+  setCanvasSize();
+  drawWheel();
+});
