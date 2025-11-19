@@ -147,7 +147,7 @@ function getColor(item, maxitem) {
 // Function to determine the contrasting text color
 function getContrastingTextColor(backgroundColor) {
   // Extract HSL values from the background color string
-  var hslRegex = /hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/;
+  var hslRegex = /hsl\((\d+\.?\d*),\s*(\d+)%,\s*(\d+)%\)/;
   var result = hslRegex.exec(backgroundColor);
 
   var h = parseInt(result[1]);
